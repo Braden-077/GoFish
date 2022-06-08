@@ -13,6 +13,14 @@ class Card
   end
 
   def ==(other)
-    @rank == other.rank
+    @rank == other.rank && @suit == other.suit
+  end
+
+  def <=>(other)
+    RANKS.index(@rank) <=> RANKS.index(other.rank)
+  end
+
+  def same_rank?(other)
+    @rank == other
   end
 end

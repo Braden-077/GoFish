@@ -13,7 +13,8 @@ describe Card do
     it 'tests the ranks if they are the same' do
       card1 = Card.new('A', 'S')
       card2 = Card.new('A', 'C')
-      expect(card1).to eq card2
+      compared_value = card1.same_rank?(card2.rank)
+      expect(compared_value).to eq true
     end
   end
 
