@@ -3,6 +3,6 @@
 require 'game_manager'
 
 describe GameManager do
-  
+
 end
 

@@ -1,5 +1,7 @@
 # frozen_string_literal: true 
 
+require_relative 'deck'
+
 class Game
   attr_accessor :deck, :players
   def initialize(players = [], deck = Deck.new)
