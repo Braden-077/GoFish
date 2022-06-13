@@ -76,10 +76,8 @@ describe Game do
     it 'returns the second player when one turn has been taken' do
       asked_player = Player.new('Braden', [Card.new('A', 'S'), Card.new('A', 'C'), Card.new('A', 'D')])
       asking_player = Player.new('Josh', [Card.new('A', 'H')]) 
-      game = Game.new([asking_player, asked_player])
+      game = Game.new([asking_player, asked_player], Deck.new, true)
       
-      game.started = true  
-      expect(game.started).to be true
       expect(game.turn_player.name).to eq 'Josh'
       game.play_round('Q', asking_player, asked_player)
       expect(game.round).to eq 2

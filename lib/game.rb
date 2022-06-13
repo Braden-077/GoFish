@@ -5,10 +5,10 @@ require_relative 'deck'
 class Game
   attr_accessor :deck, :players, :started, :round
   STARTING_HAND = 7
-  def initialize(players = [], deck = Deck.new)
+  def initialize(players = [], deck = Deck.new, started = false)
     @deck = deck
     @players = players
-    @started = false
+    @started = started
     @round = 1
     deck.shuffle!
   end
@@ -29,7 +29,7 @@ class Game
   end
 
   def turn_player
-    if started == true && @round >= 1
+    if started == true
       turn = (@round - 1) % players.count 
       players[turn]
     end
@@ -49,5 +49,9 @@ class Game
 
   def over?
     false
+  end
+
+  def get_player(name)
+    players.find {|player| player.name == name}
   end
 end

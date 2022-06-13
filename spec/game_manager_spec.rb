@@ -36,7 +36,7 @@ require 'go_fish_server'
     end
 
     describe '#run_game' do
-      it 'prints out the player\'s hand to the correct client\'s socket' do
+      it 'prints out the player\'s hand to the correct client\'s socket', :focus do
         @server.start
         client1, client2 = GoFishClient.new(@server.port_number), GoFishClient.new(@server.port_number)
         @server.accept_new_client
@@ -45,10 +45,13 @@ require 'go_fish_server'
         @server.get_player_name
         client1.provide_input('Braden')
         @server.get_player_name
+        client1.capture_output
+        client2.capture_output
         manager = @server.create_game_if_possible.first
+        client1.provide_input('Caleb')
+        client1.provide_input('A')
         manager.run_game
-        expect(manager.associated_list.values.first.card_count).to eq 7
-        expect(manager.associated_list.values.last.card_count).to eq 7
+        expect(client1.capture_output).to include("It's your turn!")
       end
     end
   end

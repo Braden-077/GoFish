@@ -16,17 +16,20 @@ class GameManager
 
   def run_game
     game.start 
-    # create loop - break when game ends
     until game.over?
-      # print hand
-      # binding.pry
-      @associated_list.each_pair {|client, player| client.puts(player.hand)}
-      # @server.puts(game.turn_player) "What would you like to ask for?" 
-      # asked_player = Which player?
-      # game.play_round(rank, game.turn_player, asked_player)
+      beginning_message
+      current = @associated_list.key(game.turn_player)
+      asked_player, rank = current.gets.chomp, current.gets.chomp 
+      game.play_round(rank, game.turn_player, game.get_player(asked_player))
       # output result based on player
       break
     end
+  end
+
+  def beginning_message
+    @associated_list.each_pair {|client, player| client.puts(player.hand)}
+    current = @associated_list.key(game.turn_player)
+    current.puts "It's your turn!\n Who would you like to ask for a card?"
   end
 
   private
