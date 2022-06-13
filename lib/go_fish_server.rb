@@ -29,7 +29,7 @@ class GoFishServer
 
   def create_game_if_possible
     if sockets.count == 2
-      games.push(GameManager.new(sockets, player_names))
+      games.push(GameManager.new(@server, sockets, player_names))
     end
   end
 

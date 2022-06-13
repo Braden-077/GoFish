@@ -3,14 +3,13 @@
 require_relative 'deck'
 
 class Game
-  attr_accessor :deck, :players, :started, :round, :books
+  attr_accessor :deck, :players, :started, :round
   STARTING_HAND = 7
   def initialize(players = [], deck = Deck.new)
-    @deck = deck   
+    @deck = deck
     @players = players
     @started = false
     @round = 1
-    @books = 0
     deck.shuffle!
   end
 

@@ -18,7 +18,7 @@ require 'go_fish_server'
   
     describe '#initialize' do
       it 'initializes without error when provided no clients or players' do
-        manager = GameManager.new()
+        manager = GameManager.new(@server)
         expect(manager.clients).to be_empty
         expect(manager.player_names).to be_empty
         expect(manager.game.class).to eq Game
@@ -28,10 +28,27 @@ require 'go_fish_server'
     
       it 'associates players and clients correctly' do
         @server.start
-        manager = GameManager.new([TCPSocket.new('localhost', 3000)], ['Braden'])
+        manager = GameManager.new(@server, [TCPSocket.new('localhost', 3000)], ['Braden'])
         expect(manager.clients).to be_one
         expect(manager.player_names).to be_one
         expect(manager.associated_list.length).to eq(1)
+      end
+    end
+
+    describe '#run_game' do
+      it 'prints out the player\'s hand to the correct client\'s socket' do
+        @server.start
+        client1, client2 = GoFishClient.new(@server.port_number), GoFishClient.new(@server.port_number)
+        @server.accept_new_client
+        @server.accept_new_client
+        client2.provide_input('Caleb')
+        @server.get_player_name
+        client1.provide_input('Braden')
+        @server.get_player_name
+        manager = @server.create_game_if_possible.first
+        manager.run_game
+        expect(manager.associated_list.values.first.card_count).to eq 7
+        expect(manager.associated_list.values.last.card_count).to eq 7
       end
     end
   end

@@ -5,23 +5,27 @@ require_relative 'player'
 require 'pry'
 
 class GameManager
-  attr_accessor :clients, :player_names, :game, :associated_list
-  def initialize(clients = [], player_names = [])
+  attr_accessor :clients, :player_names, :game, :associated_list, :server
+  def initialize(server, clients = [], player_names = [])
+    @server = server
     @clients = clients
     @player_names = create_players(player_names)
     @game = Game.new(@player_names)
-    @associated_list = associate_player_client(clients, player_names)
+    @associated_list = associate_player_client(clients, @player_names)
   end
 
   def run_game
     game.start 
     # create loop - break when game ends
-    until game.over?    
+    until game.over?
       # print hand
-      # figure out who's turn it is and ask what Rank they'd like to ask for
-      # Which player?
-      # play_round
+      # binding.pry
+      @associated_list.each_pair {|client, player| client.puts(player.hand)}
+      # @server.puts(game.turn_player) "What would you like to ask for?" 
+      # asked_player = Which player?
+      # game.play_round(rank, game.turn_player, asked_player)
       # output result based on player
+      break
     end
   end
 
