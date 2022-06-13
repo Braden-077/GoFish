@@ -105,27 +105,6 @@ describe GoFishServer do
       expect(@server.games.first.game.players.last.name).to eq 'Caleb'
     end
   end
-
-  describe 'GameManager' do
-    describe '#initialize' do
-      it 'initializes without error when provided no clients or players' do
-        manager = GameManager.new()
-        expect(manager.clients).to be_empty
-        expect(manager.players).to be_empty
-        expect(manager.game.class).to eq Game
-        expect(manager.game.players).to be_empty
-        expect{ manager }.not_to raise_error
-      end
-    
-      it 'associates players and clients correctly' do
-        @server.start
-        manager = GameManager.new([TCPSocket.new('localhost', 3000)], ['Braden'])
-        expect(manager.clients).to be_one
-        expect(manager.players).to be_one
-        expect(manager.associated_list.length).to eq(1)
-      end
-    end
-  end
   
   
   # Add more tests to make sure the game is being played
