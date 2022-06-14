@@ -17,22 +17,30 @@ class GameManager
   def run_game
     game.start 
     until game.over?
-      beginning_message
-      current = @associated_list.key(game.turn_player)
-      asked_player, rank = current.gets.chomp, current.gets.chomp 
+      asked_player = beginning_message
+      rank = ask_rank
       game.play_round(rank, game.turn_player, game.get_player(asked_player))
-      # output result based on player
+      puts game.round_output
       break
     end
   end
 
   def beginning_message
-    @associated_list.each_pair {|client, player| client.puts(player.hand)}
-    current = @associated_list.key(game.turn_player)
-    current.puts "It's your turn!\n Who would you like to ask for a card?"
+    @associated_list.each_pair {|client, player| client.puts(player.hand.map(&:to_s))}
+    current_player.puts "It's your turn!\n Who would you like to ask for a card?"
+    current_player.gets.chomp
+  end
+
+  def ask_rank
+    current_player.puts "What rank would you like to ask for?"
+    current_player.gets.chomp
   end
 
   private
+
+  def current_player
+    current = @associated_list.key(game.turn_player)
+  end
 
   def create_players(player_names)
     player_names.map {|player| Player.new(player)}

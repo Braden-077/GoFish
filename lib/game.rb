@@ -3,10 +3,11 @@
 require_relative 'deck'
 
 class Game
-  attr_accessor :deck, :players, :started, :round
+  attr_accessor :deck, :players, :started, :round, :round_output
   STARTING_HAND = 7
   def initialize(players = [], deck = Deck.new, started = false)
     @deck = deck
+    @round_output = round_output
     @players = players
     @started = started
     @round = 1
@@ -22,7 +23,7 @@ class Game
     if asking_player.has_card?(rank) && player_asked.has_card?(rank)
       asking_player.take(player_asked.give(rank))
     elsif !player_asked.has_card?(rank)
-      "#{player_asked} doesn't have any #{rank}'s. Go Fish."
+      @round_output = "#{player_asked.name} doesn't have any #{rank}'s. Go Fish."
       go_fish(asking_player)
       up_round
     end

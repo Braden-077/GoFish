@@ -23,6 +23,7 @@ class GoFishServer
   def accept_new_client
     socket = @server.accept
     sockets.push(socket)
+    puts "A new challenger approaches!"
     socket.puts "You've connected!"
     socket.puts "Please enter your name:"
   end
@@ -42,7 +43,19 @@ class GoFishServer
     sockets.each_with_index do |socket, index|
       next if player_names[index]
       begin
+        player_names[index] = socket.gets.strip
+        puts "Got name!"
+      rescue IO::WaitReadable
+      end
+    end
+  end
+
+  def get_player_name_for_tests
+    sockets.each_with_index do |socket, index|
+      next if player_names[index]
+      begin
         player_names[index] = socket.read_nonblock(1000).strip
+        puts "Got name!"
       rescue IO::WaitReadable
       end
     end

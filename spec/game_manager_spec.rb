@@ -42,9 +42,9 @@ require 'go_fish_server'
         @server.accept_new_client
         @server.accept_new_client
         client2.provide_input('Caleb')
-        @server.get_player_name
+        @server.get_player_name_for_tests
         client1.provide_input('Braden')
-        @server.get_player_name
+        @server.get_player_name_for_tests
         client1.capture_output
         client2.capture_output
         manager = @server.create_game_if_possible.first

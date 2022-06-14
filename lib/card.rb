@@ -23,4 +23,8 @@ class Card
   def same_rank?(other)
     @rank == other
   end
+
+  def to_s
+    "#{rank}, #{suit}"
+  end
 end

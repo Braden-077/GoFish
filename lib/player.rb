@@ -6,7 +6,7 @@ class Player
   attr_accessor :name, :hand, :books
   def initialize(name = '', hand = [], books = [])
     @name = name
-    @hand = hand 
+    @hand = hand
     @books = books
   end
 
