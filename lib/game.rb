@@ -22,12 +22,12 @@ class Game
   def play_round(rank, asking_player, player_asked)
     if asking_player.has_card?(rank) && player_asked.has_card?(rank)
       asking_player.take(player_asked.give(rank))
-      @round_output = "#{player_asked.name} had #{rank}! #{asking_player.name} took all #{rank}'s."
+      @round_output = "#{player_asked.name} had #{rank}. #{asking_player} go again!"
     elsif !player_asked.has_card?(rank)
       @round_output = "#{player_asked.name} doesn't have any #{rank}'s. Go Fish."
       go_fish(asking_player)
-      up_round
     end
+    up_round
   end
 
   def turn_player
