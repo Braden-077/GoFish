@@ -21,13 +21,11 @@ class Game
 
   def play_round(rank, asking_player, player_asked)
     if asking_player.has_card?(rank) && player_asked.has_card?(rank)
-      asking_player.take(player_asked.give(rank))
-      @round_output = "#{player_asked.name} had #{rank}. #{asking_player} go again!"
+      outcome_one(rank, asking_player, player_asked)
     elsif !player_asked.has_card?(rank)
-      @round_output = "#{player_asked.name} doesn't have any #{rank}'s. Go Fish."
-      go_fish(asking_player)
+      outcome_two(rank, asking_player, player_asked)
+      up_round
     end
-    up_round
   end
 
   def turn_player
@@ -55,5 +53,17 @@ class Game
 
   def get_player(name)
     players.find {|player| player.name == name}
+  end
+
+  private 
+  
+  def outcome_one(rank, asking_player, player_asked)
+    @round_output = "#{player_asked.name} had #{rank}. #{asking_player.name} go again!"
+    asking_player.take(player_asked.give(rank))
+  end
+
+  def outcome_two(rank, asking_player, player_asked)
+    @round_output = "#{player_asked.name} doesn't have any #{rank}'s. Go Fish."
+    go_fish(asking_player)
   end
 end

@@ -21,6 +21,16 @@ class GameManager
       rank = ask_rank
       game.play_round(rank, game.turn_player, game.get_player(asked_player))
       puts game.round_output
+    end
+  end
+
+  def run_game_for_tests
+    game.start 
+    until game.over?
+      asked_player = beginning_message
+      rank = ask_rank
+      game.play_round(rank, game.turn_player, game.get_player(asked_player))
+      puts game.round_output
       break
     end
   end
@@ -28,7 +38,7 @@ class GameManager
   def beginning_message
     @associated_list.each_pair {|client, player| client.puts(player.hand.map(&:to_s))}
     @associated_list.each_key {|client| client.puts } # Purely for CLI
-    current_player.puts "It's your turn!\n Who would you like to ask for a card?"
+    current_player.puts "It's your turn!\nWho would you like to ask for a card?"
     current_player.gets.chomp
   end
 

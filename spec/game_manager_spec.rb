@@ -50,8 +50,8 @@ require 'go_fish_server'
         manager = @server.create_game_if_possible.first
         client1.provide_input('Caleb')
         client1.provide_input('A')
-        manager.run_game
-        expect(client1.capture_output).to include("It's your turn!")
+        manager.run_game_for_tests
+        expect(client1.read_from_server).to include("It's your turn!")
       end
     end
   end
