@@ -97,8 +97,8 @@ describe Game do
   describe '#over?' do
     it 'returns true when all 13 books have been collected' do
       game = Game.new([Player.new('Josh'), Player.new('Braden')])
-      game.players.first.books = ['2', '3', '4', '5', '6', '7', '8', '9', '10']
-      game.players.last.books = ['J', 'Q', 'K', 'A']
+      game.players.first.books = %w( 2 3 4 5 6 7 8 9 10 ) 
+      game.players.last.books = %w( J Q K A )
       expect(game.over?).to be true
     end
 

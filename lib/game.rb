@@ -5,17 +5,20 @@ require_relative 'deck'
 class Game
   attr_accessor :deck, :players, :started, :round, :round_output, :fish
   STARTING_HAND = 7
+  TOTAL_BOOKS = 13
   def initialize(players = [], deck = Deck.new, started = false)
     @deck = deck
     @round_output = round_output
     @players = players
     @started = started
     @round = 1
+    deck.shuffle!
   end
 
   def start
+    return if started
     STARTING_HAND.times {players.each {|player| player.take(deck.deal)}}
-    @started = true 
+    @started = true
   end
 
   def play_round(rank, player_asked)
@@ -49,7 +52,11 @@ class Game
   end
 
   def over?
-    players.sum {|player| player.books.length} == 13
+    book_count == TOTAL_BOOKS
+  end
+
+  def book_count
+    players.sum {|player| player.books.length}
   end
 
   def get_player(name)

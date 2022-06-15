@@ -17,6 +17,7 @@ class Card
   end
 
   def <=>(other)
+    return 0 unless other
     RANKS.index(@rank) <=> RANKS.index(other.rank)
   end
 
