@@ -7,6 +7,7 @@ require 'go_fish_server'
     before(:each) do
       @sockets = []
       @server = GoFishServer.new
+      @server.start
     end
 
   after(:each) do
@@ -27,7 +28,6 @@ require 'go_fish_server'
       end
     
       it 'associates players and clients correctly' do
-        @server.start
         manager = GameManager.new(@server, [TCPSocket.new('localhost', 3000)], ['Braden'])
         expect(manager.clients).to be_one
         expect(manager.player_names).to be_one
@@ -36,22 +36,31 @@ require 'go_fish_server'
     end
 
     describe '#run_game' do
-      it 'prints out the player\'s hand to the correct client\'s socket', :focus do
-        @server.start
-        client1, client2 = GoFishClient.new(@server.port_number), GoFishClient.new(@server.port_number)
-        @server.accept_new_client
-        @server.accept_new_client
-        client2.provide_input('Caleb')
-        @server.get_player_name_for_tests
-        client1.provide_input('Braden')
-        @server.get_player_name_for_tests
-        client1.capture_output
-        client2.capture_output
+      it 'runs a game until all 13 books have been collected' do
+        clients = setup_server_with_clients(['Caleb', 'Braden'])
         manager = @server.create_game_if_possible.first
-        client1.provide_input('Caleb')
-        client1.provide_input('A')
-        manager.run_game_for_tests
-        expect(client1.read_from_server).to include("It's your turn!")
+        manager.game.deck.cards = []
+        manager.game.players.first.books = %w( 2 3 4 5 6 7 8 9 10 )
+        manager.game.players.last.books = %w( J Q K )
+        manager.associated_list.values[0].hand = [Card.new('A', 'S'), Card.new('A', 'C'), Card.new('A', 'D')]
+        manager.associated_list.values[1].hand = [Card.new('A', 'H')]
+        clients[0].send_to_server('Braden')
+        clients[0].send_to_server('A')
+        manager.game.started = true
+        manager.run_game 
+        expect(manager.game.over?).to be true
+        expect(manager.game.players)
       end
     end
-  end
+
+    def setup_server_with_clients(player_names)
+      player_names.map do |player_name|
+        client = GoFishClient.new(3000)
+        @server.accept_new_client
+        client.send_to_server(player_name)
+        @server.get_player_name
+        client.read_from_server
+        client
+      end
+    end
+end
