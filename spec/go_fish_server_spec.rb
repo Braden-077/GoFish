@@ -51,24 +51,22 @@ describe GoFishServer do
     
     
     it 'prompts a player for their name and associates it with the client' do
-      
       client1 = GoFishClient.new(@server.port_number)
       @server.accept_new_client
-      expect(client1.capture_output.strip).to end_with 'Please enter your name:'
-      client1.provide_input('Braden')
-      @server.get_player_name_for_tests
+      client1.send_to_server('Braden')
+      expect(client1.read_from_server.strip).to end_with 'Please enter your name:'
+      @server.get_player_name
       expect(@server.player_names.first).to eq 'Braden'
     end
   
     it 'allows for the second user to input their name and still be refered to by name' do
-      
       client1, client2 = GoFishClient.new(@server.port_number), GoFishClient.new(@server.port_number)
       @server.accept_new_client
+      client2.send_to_server('Caleb')
       @server.accept_new_client
-      client2.provide_input('Caleb')
-      @server.get_player_name_for_tests
-      client1.provide_input('Braden')
-      @server.get_player_name_for_tests
+      client1.send_to_server('Braden')
+      @server.get_player_name
+      @server.get_player_name
       expect(@server.player_names.first).to eq 'Braden'
       expect(@server.player_names.last).to eq 'Caleb'
     end
@@ -77,11 +75,11 @@ describe GoFishServer do
       
       client1, client2 = GoFishClient.new(@server.port_number), GoFishClient.new(@server.port_number)
       @server.accept_new_client
-      @server.accept_new_client
       client2.provide_input('Caleb')
-      @server.get_player_name_for_tests
+      @server.accept_new_client
       client1.provide_input('Braden')
-      @server.get_player_name_for_tests
+      @server.get_player_name
+      @server.get_player_name
       expect(@server.player_names.first).to eq 'Braden'
       expect(@server.player_names.last).to eq 'Caleb'
     end
@@ -90,11 +88,11 @@ describe GoFishServer do
       
       client1, client2 = GoFishClient.new(@server.port_number), GoFishClient.new(@server.port_number)
       @server.accept_new_client
-      @server.accept_new_client
       client2.provide_input('Caleb')
-      @server.get_player_name_for_tests
+      @server.accept_new_client
       client1.provide_input('Braden')
-      @server.get_player_name_for_tests
+      @server.get_player_name
+      @server.get_player_name
       @server.create_game_if_possible
       expect(@server.games.first.game.players.count).to eq 2
       expect(@server.games.first.game.players.first.name).to eq 'Braden'

@@ -50,17 +50,6 @@ class GoFishServer
     end
   end
 
-  def get_player_name_for_tests
-    sockets.each_with_index do |socket, index|
-      next if player_names[index]
-      begin
-        player_names[index] = socket.read_nonblock(1000).strip
-        puts "Got name!"
-      rescue IO::WaitReadable
-      end
-    end
-  end
-
   def stop
     @server.close if @server
   end
