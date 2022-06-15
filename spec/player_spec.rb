@@ -60,5 +60,20 @@ describe Player do
       expect(player.hand).to eq [Card.new('2', 'C'), Card.new('3', 'D'), Card.new('4', 'H')]
     end
   end
-  # TODO (after skeleton works): Write test to check for books and sort the hand for book
+  describe '#check_for_books' do
+    it 'checks the player\'s hand for any books and adds them to his book collection' do
+      player = Player.new('Braden', [Card.new('A', 'S'), Card.new('A', 'C'), Card.new('A', 'H'), Card.new('A', 'D')])
+      player.check_for_book('A')
+      expect(player.hand).to be_empty
+      expect(player.books).to eq ['A']
+      expect(player.books.count).to eq 1 
+    end
+
+    it 'checks the player\'s hand for books and returns false if there are not four of the rank' do
+      player = Player.new('Braden', [Card.new('A', 'S'), Card.new('A', 'C'), Card.new('A', 'D')])
+      player.check_for_book('A')
+      expect(player.books).to be_empty
+      expect(player.hand).to match_array [Card.new('A', 'S'), Card.new('A', 'C'), Card.new('A', 'D')]
+    end
+  end
 end
